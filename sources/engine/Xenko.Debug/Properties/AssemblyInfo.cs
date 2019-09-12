@@ -17,5 +17,3 @@ using System.Runtime.InteropServices;
 [assembly: Guid("106cd3bf-dec8-4f32-adcc-b089ab95736c")]
 
 #pragma warning disable 436 // Xenko.PublicKeys is defined in multiple assemblies
-
-[assembly: InternalsVisibleTo("Xenko.Engine" + Xenko.PublicKeys.Default)]

@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using Xenko.Core;
 using Xenko.Core.Collections;
 using Xenko.Core.Mathematics;
+using Xenko.Engine;
+using Xenko.Games;
+using Xenko.Graphics;
 using Xenko.Rendering;
 
 namespace Xenko.Debug

@@ -79,8 +79,11 @@ using Xenko.Core.Mathematics;
 using Xenko.Graphics.GeometricPrimitives;
 using Xenko.Graphics;
 
-namespace Xenko.Debug {
-    public class DebugPrimitives {
+namespace Xenko.Debug
+ {
+
+    public class DebugPrimitives
+    {
 
         static private Vector2 noLineUv = new Vector2(0.5f);
         static private Vector2 lineUv = new Vector2(1.0f);

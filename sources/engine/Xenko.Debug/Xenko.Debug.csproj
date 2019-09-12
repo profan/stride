@@ -1,32 +1,25 @@
-﻿<Project ToolsVersion="Current">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <XenkoAssemblySign>true</XenkoAssemblySign>
-    <XenkoRuntime>true</XenkoRuntime>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <Import Project="..\..\targets\Xenko.PreSettings.targets" />
-  <Import Project="Sdk.props" Sdk="MSBuild.Sdk.Extras" Version="2.0.24" />
-  <PropertyGroup>
-    <XenkoAssemblyProcessor>true</XenkoAssemblyProcessor>
-    <XenkoPlatformDependent>true</XenkoPlatformDependent>
-    <XenkoProjectPlatformDependentWindows>true</XenkoProjectPlatformDependentWindows>
-    <XenkoBuildTags>*</XenkoBuildTags>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\shared\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Remove="Shaders\LinePrimitiveShader.cs" />
+    <Compile Remove="Shaders\PrimitiveShader.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Xenko.Engine\Xenko.Engine.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <None Update="Shaders\LinePrimitiveShader.xksl">
+      <Generator>XenkoShaderKeyGenerator</Generator>
+    </None>
+    <None Update="Shaders\PrimitiveShader.xksl">
+      <Generator>XenkoShaderKeyGenerator</Generator>
+    </None>
   </ItemGroup>
-  <Import Project="$(XenkoPostSettingsTargets)" />
-  <Import Project="Sdk.targets" Sdk="MSBuild.Sdk.Extras" Version="2.0.24" />
+
 </Project>

@@ -1,4 +1,4 @@
-namespace DebugRendering
+namespace Xenko.Debug
 {
 
     shader PrimitiveShader : ShaderBase, ColorBase
