@@ -80,7 +80,7 @@ using Xenko.Graphics.GeometricPrimitives;
 using Xenko.Graphics;
 
 namespace Xenko.Debug
- {
+{
 
     public class DebugPrimitives
     {
