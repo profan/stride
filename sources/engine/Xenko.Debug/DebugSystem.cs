@@ -325,7 +325,8 @@ namespace Xenko.Debug
         public override void Update(GameTime gameTime)
         {
 
-            // PrimitiveRenderer.RenderGroup = RenderGroup;
+            if (!Enabled) return;
+
             if (primitiveRenderer == null)
             {
                 SceneSystem sceneSystem = Services.GetService<SceneSystem>();
@@ -346,10 +347,10 @@ namespace Xenko.Debug
 
             switch (RenderMode) {
                 case RenderingMode.Wireframe:
-                    primitiveRenderer.SetFillMode(FillMode.Wireframe);
+                    primitiveRenderer.CurrentFillMode = FillMode.Wireframe;
                     break;
                 case RenderingMode.Solid:
-                    primitiveRenderer.SetFillMode(FillMode.Solid);
+                    primitiveRenderer.CurrentFillMode = FillMode.Solid;
                     break;
             }
 

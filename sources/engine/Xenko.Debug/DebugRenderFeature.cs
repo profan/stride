@@ -27,12 +27,7 @@ namespace Xenko.Debug
             internal Primitives totalPrimitives, totalPrimitivesNoDepth;
 
             /* state set from outside */
-            internal FillMode currentFillMode = FillMode.Wireframe;
-
-            public void SetFillMode(FillMode fillMode)
-            {
-                currentFillMode = fillMode;
-            }
+            internal FillMode CurrentFillMode { get; set; }
 
             public void DrawQuad(ref Vector3 position, ref Vector2 size, ref Quaternion rotation, ref Color color, bool depthTest = true)
             {
@@ -942,12 +937,12 @@ namespace Xenko.Debug
             var commandList = context.CommandList;
 
             // update pipeline state, render with depth test first
-            SetPrimitiveRenderingPipelineState(commandList, depthTest: true, selectedFillMode: debugObject.currentFillMode);
-            RenderPrimitives(context, renderView, ref instanceOffsets, ref primitivesToDraw, depthTest: true, fillMode: debugObject.currentFillMode);
+            SetPrimitiveRenderingPipelineState(commandList, depthTest: true, selectedFillMode: debugObject.CurrentFillMode);
+            RenderPrimitives(context, renderView, ref instanceOffsets, ref primitivesToDraw, depthTest: true, fillMode: debugObject.CurrentFillMode);
 
             // render without depth test second
-            SetPrimitiveRenderingPipelineState(commandList, depthTest: false, selectedFillMode: debugObject.currentFillMode);
-            RenderPrimitives(context, renderView, offsets: ref instanceOffsetsNoDepth, counts: ref primitivesToDrawNoDepth, depthTest: false, fillMode: debugObject.currentFillMode);
+            SetPrimitiveRenderingPipelineState(commandList, depthTest: false, selectedFillMode: debugObject.CurrentFillMode);
+            RenderPrimitives(context, renderView, offsets: ref instanceOffsetsNoDepth, counts: ref primitivesToDrawNoDepth, depthTest: false, fillMode: debugObject.CurrentFillMode);
 
         }
 
