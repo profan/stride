@@ -322,11 +322,11 @@ namespace Xenko.Debug
             PushMessage(ref msg);
         }
 
-        private void CreateDebugRenderObject()
+        private bool CreateDebugRenderObject()
         {
 
             var sceneSystem = Services.GetService<SceneSystem>();
-            if (sceneSystem == null) return;
+            if (sceneSystem == null) return false;
 
             var sceneInstance = sceneSystem.SceneInstance;
             VisibilityGroup visibilityGroup = null;
@@ -340,16 +340,12 @@ namespace Xenko.Debug
                 }
             }
 
-            if (visibilityGroup != null)
-            {
-                var newDebugRenderObject = new DebugRenderFeature.DebugRenderObject();
-                visibilityGroup.RenderObjects.Add(newDebugRenderObject);
-                primitiveRenderer = newDebugRenderObject;
-            }
-            else
-            {
-                return; // still no visibility group to use
-            }
+            if (visibilityGroup == null) return false;
+            var newDebugRenderObject = new DebugRenderFeature.DebugRenderObject();
+            visibilityGroup.RenderObjects.Add(newDebugRenderObject);
+            primitiveRenderer = newDebugRenderObject;
+
+            return true;
 
         }
 
@@ -358,7 +354,11 @@ namespace Xenko.Debug
 
             if (!Enabled) return;
 
-            if (primitiveRenderer == null) CreateDebugRenderObject();
+            if (primitiveRenderer == null)
+            {
+                bool created = CreateDebugRenderObject();
+                if (!created) return;
+            }
 
             switch (RenderMode) {
                 case RenderingMode.Wireframe:
