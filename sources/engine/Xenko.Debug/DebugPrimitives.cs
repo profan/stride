@@ -81,7 +81,6 @@ using Xenko.Graphics;
 
 namespace Xenko.Debug
 {
-
     public class DebugPrimitives
     {
 
@@ -111,7 +110,7 @@ namespace Xenko.Debug
             }
         }
 
-        public static(VertexPositionTexture[] Vertices, int[] Indices) GenerateQuad(float width, float height)
+        public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateQuad(float width, float height)
         {
 
             var quadMeshData = GeometricPrimitive.Plane.New(width, height);
@@ -206,7 +205,8 @@ namespace Xenko.Debug
                     indices[curIdx++] = offset + ((i / 3) % tesselations);
                     indices[curIdx++] = offset + (((i / 3) + 1) % tesselations);
 
-                } else
+                }
+                else
                 {
                     indices[i] = 0;
                     indices[i + 1] = offset + ((i / 3) % tesselations);
@@ -223,7 +223,7 @@ namespace Xenko.Debug
 
         }
 
-        public static(VertexPositionTexture[] Vertices, int[] Indices) GenerateCube(float size = 1.0f)
+        public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCube(float size = 1.0f)
         {
 
             var cubeMeshData = GeometricPrimitive.Cube.New(size);
@@ -236,7 +236,7 @@ namespace Xenko.Debug
 
         }
 
-        public static(VertexPositionTexture[] Vertices, int[] Indices) GenerateSphere(float radius = 0.5f, int tesselations = 16, int uvSplits = 4)
+        public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateSphere(float radius = 0.5f, int tesselations = 16, int uvSplits = 4)
         {
 
             if (uvSplits != 0 && tesselations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
@@ -259,12 +259,16 @@ namespace Xenko.Debug
             {
                 for (int i = 0; i < verticalSegments; i++)
                 {
-                    for (int j = 0; j <= horizontalSegments; j++) {
+                    for (int j = 0; j <= horizontalSegments; j++)
+                    {
                         int vertModulo = i % (verticalSegments / uvSplits);
                         int horizModulo = j % (horizontalSegments / uvSplits);
-                        if (hasUvSplit > 0 && (vertModulo == 0 && horizModulo == 0)) {
+                        if (hasUvSplit > 0 && (vertModulo == 0 && horizModulo == 0))
+                        {
                             extraVertexCount += 4;
-                        } else if (hasUvSplit > 0 && (vertModulo == 0 || horizModulo == 0)) {
+                        }
+                        else if (hasUvSplit > 0 && (vertModulo == 0 || horizModulo == 0))
+                        {
                             extraVertexCount += 2;
                         }
                     }
@@ -435,8 +439,8 @@ namespace Xenko.Debug
             var hasUvSplit = (uvSplits > 0 ? 1 : 0);
             var (capVertices, capIndices) = GenerateCircle(radius, tesselations, uvSidesForCircle ?? uvSplits, uvOffset: 1);
 
-            VertexPositionTexture[] vertices = new VertexPositionTexture[(capVertices.Length * 2) + ((tesselations+1) * 4)];
-            int[] indices = new int[(capIndices.Length * 2) + ((tesselations+1) * 6)];
+            VertexPositionTexture[] vertices = new VertexPositionTexture[(capVertices.Length * 2) + ((tesselations + 1) * 4)];
+            int[] indices = new int[(capIndices.Length * 2) + ((tesselations + 1) * 6)];
 
             int bottomVertsOffset = (vertices.Length - capVertices.Length);
             int topVertsOffset = (vertices.Length - capVertices.Length * 2);
@@ -452,7 +456,7 @@ namespace Xenko.Debug
             }
 
             // copy indices
-            for (int i = 0; i < capIndices.Length; ++i) 
+            for (int i = 0; i < capIndices.Length; ++i)
             {
                 indices[bottomIndicesOffset + i] = capIndices[i] + bottomVertsOffset;
                 indices[topIndicesOffset + i] = capIndices[i] + topVertsOffset;
@@ -597,7 +601,7 @@ namespace Xenko.Debug
 
             var vertices = new VertexPositionTexture[verticalSegments * (horizontalSegments + 1) + extraVertexCount];
             var indices = new int[(verticalSegments - 1) * (horizontalSegments + 1) * 6];
-            
+
             var vertexCount = 0;
             // Create rings of vertices at progressively higher latitudes.
             for (int i = 0; i < verticalSegments; i++)
