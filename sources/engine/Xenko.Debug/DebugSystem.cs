@@ -322,28 +322,43 @@ namespace Xenko.Debug
             PushMessage(ref msg);
         }
 
+        private void CreateDebugRenderObject()
+        {
+
+            var sceneSystem = Services.GetService<SceneSystem>();
+            if (sceneSystem == null) return;
+
+            var sceneInstance = sceneSystem.SceneInstance;
+            VisibilityGroup visibilityGroup = null;
+
+            foreach (var currentVisibilityGroup in sceneInstance.VisibilityGroups)
+            {
+                if (currentVisibilityGroup.RenderSystem == sceneSystem.GraphicsCompositor.RenderSystem)
+                {
+                    visibilityGroup = currentVisibilityGroup;
+                    break;
+                }
+            }
+
+            if (visibilityGroup != null)
+            {
+                var newDebugRenderObject = new DebugRenderFeature.DebugRenderObject();
+                visibilityGroup.RenderObjects.Add(newDebugRenderObject);
+                primitiveRenderer = newDebugRenderObject;
+            }
+            else
+            {
+                return; // still no visibility group to use
+            }
+
+        }
+
         public override void Update(GameTime gameTime)
         {
 
             if (!Enabled) return;
 
-            if (primitiveRenderer == null)
-            {
-                SceneSystem sceneSystem = Services.GetService<SceneSystem>();
-                if (sceneSystem != null)
-                {
-                    var groups = sceneSystem.SceneInstance.VisibilityGroups;
-                    if (groups.Count > 0)
-                    {
-                        var newDebugRenderObject = new DebugRenderFeature.DebugRenderObject();
-                        groups[0].RenderObjects.Add(newDebugRenderObject);
-                        primitiveRenderer = newDebugRenderObject;
-                    } else
-                    {
-                        return; // still no visibility group to use
-                    }
-                }
-            }
+            if (primitiveRenderer == null) CreateDebugRenderObject();
 
             switch (RenderMode) {
                 case RenderingMode.Wireframe:

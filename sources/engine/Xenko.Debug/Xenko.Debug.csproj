@@ -9,20 +9,32 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Shaders\LinePrimitiveShader.cs" />
-    <Compile Remove="Shaders\PrimitiveShader.cs" />
+    <ProjectReference Include="..\Xenko.Engine\Xenko.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xenko.Engine\Xenko.Engine.csproj" />
+    <Compile Update="Shaders\LinePrimitiveShader.cs">
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinePrimitiveShader.xksl</DependentUpon>
+    </Compile>
+    <Compile Update="Shaders\PrimitiveShader.cs">
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PrimitiveShader.xksl</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Shaders\LinePrimitiveShader.xksl">
       <Generator>XenkoShaderKeyGenerator</Generator>
+      <LastGenOutput>LinePrimitiveShader.cs</LastGenOutput>
     </None>
     <None Update="Shaders\PrimitiveShader.xksl">
       <Generator>XenkoShaderKeyGenerator</Generator>
+      <LastGenOutput>PrimitiveShader.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
