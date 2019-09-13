@@ -648,7 +648,7 @@ namespace Xenko.Debug
                 return offsets;
             }
 
-            // TODO: check if we actually have an object first next here
+            // TODO: deal with multiple render objects?
 
             if (RenderObjects.Count <= 0) return;
             DebugRenderObject debugObject = (DebugRenderObject)RenderObjects[0];
@@ -930,7 +930,7 @@ namespace Xenko.Debug
         public override void Draw(RenderDrawContext context, RenderView renderView, RenderViewStage renderViewStage, int startIndex, int endIndex)
         {
 
-            // TODO: check if we actually have one first next
+            // TODO: deal with multiple render objects for this one feature?
             if (RenderObjects.Count <= 0) return;
             DebugRenderObject debugObject = (DebugRenderObject)RenderObjects[0];
 
