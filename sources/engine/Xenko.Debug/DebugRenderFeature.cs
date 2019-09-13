@@ -664,7 +664,7 @@ namespace Xenko.Debug
                 lineVertices.Resize((debugObject.totalPrimitives.Lines * 2) + (debugObject.totalPrimitivesNoDepth.Lines * 2), true);
 
                 var primitiveOffsets = SetupPrimitiveOffsets(ref debugObject.totalPrimitives, lastOffset);
-                var primitiveOffsetsNoDepth = SetupPrimitiveOffsets(ref debugObject.totalPrimitivesNoDepth, primitivesWithDepth + lastOffset);
+                var primitiveOffsetsNoDepth = SetupPrimitiveOffsets(ref debugObject.totalPrimitivesNoDepth, primitiveOffsets.Cones + debugObject.totalPrimitives.Cones);
 
                 /* line rendering data, separate buffer so offset isnt relative to the other data */
                 primitiveOffsets.Lines = 0;
@@ -680,13 +680,14 @@ namespace Xenko.Debug
                 debugObject.primitivesToDraw = debugObject.totalPrimitives;
                 debugObject.primitivesToDrawNoDepth = debugObject.totalPrimitivesNoDepth;
 
+                // store the last offsets, so we can start from there next iteration
+                lastOffset = debugObject.instanceOffsetsNoDepth.Cones + debugObject.totalPrimitivesNoDepth.Cones;
+
+                // only now clear this data...
                 debugObject.renderablesWithDepth.Clear(true);
                 debugObject.renderablesNoDepth.Clear(true);
                 debugObject.totalPrimitives.Clear();
                 debugObject.totalPrimitivesNoDepth.Clear();
-
-                // store the last offsets, so we can start from there next iteration
-                lastOffset = debugObject.instanceOffsetsNoDepth.Cones;
 
             }
 
@@ -780,7 +781,7 @@ namespace Xenko.Debug
                     : DepthStencilStates.None;
             pipelineState.State.RasterizerState.FillMode = selectedFillMode;
             pipelineState.State.RasterizerState.CullMode = (selectedFillMode == FillMode.Solid && !isDoubleSided) ? CullMode.Back : CullMode.None;
-            pipelineState.State.BlendState = BlendStates.NonPremultiplied;
+            pipelineState.State.BlendState = (selectedFillMode == FillMode.Solid) ? BlendStates.NonPremultiplied : BlendStates.Additive;
             pipelineState.State.Output.CaptureState(commandList);
             pipelineState.State.InputElements = inputElements;
             pipelineState.Update();
@@ -795,7 +796,7 @@ namespace Xenko.Debug
             pipelineState.State.DepthStencilState = (depthTest) ? DepthStencilStates.DepthRead : DepthStencilStates.None;
             pipelineState.State.RasterizerState.FillMode = FillMode.Solid;
             pipelineState.State.RasterizerState.CullMode = CullMode.None;
-            pipelineState.State.BlendState = BlendStates.AlphaBlend;
+            pipelineState.State.BlendState = BlendStates.Additive;
             pipelineState.State.Output.CaptureState(commandList);
             pipelineState.State.InputElements = lineInputElements;
             pipelineState.Update();
