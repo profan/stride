@@ -374,7 +374,7 @@ namespace Xenko.Debug
         public override void Update(GameTime gameTime)
         {
 
-            if (!Enabled) return;
+            if (!Enabled || !Visible) return;
 
             if (wireframePrimitiveRenderer == null)
             {
