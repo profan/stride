@@ -943,13 +943,13 @@ namespace Xenko.DebugRendering
         public override void Draw(RenderDrawContext context, RenderView renderView, RenderViewStage renderViewStage, int startIndex, int endIndex)
         {
 
+            var commandList = context.CommandList;
+
             // TODO: probably get these objects from renderView?
-            foreach (RenderObject renderObject in RenderObjects)
+            for (int index = startIndex; index < endIndex; index++)
             {
-
-                DebugRenderObject debugObject = (DebugRenderObject)renderObject;
-
-                var commandList = context.CommandList;
+                var renderNodeReference = renderViewStage.SortedRenderNodes[index].RenderNode;
+                var debugObject = (DebugRenderObject)(GetRenderNode(renderNodeReference).RenderObject);
 
                 // update pipeline state, render with depth test first
                 SetPrimitiveRenderingPipelineState(commandList, depthTest: true, selectedFillMode: debugObject.CurrentFillMode);
