@@ -11,7 +11,7 @@ using Xenko.Rendering;
 
 using Buffer = Xenko.Graphics.Buffer;
 
-namespace Xenko.Debug
+namespace Xenko.DebugRendering
 {
     public class DebugRenderFeature : RootRenderFeature
     {

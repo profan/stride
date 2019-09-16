@@ -5,7 +5,7 @@ using System.Reflection;
 using Xenko.Core;
 using Xenko.Core.Reflection;
 
-namespace Xenko.Debug
+namespace Xenko.DebugRendering
 {
     class Module
     {

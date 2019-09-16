@@ -6,14 +6,15 @@ using System.Runtime.InteropServices;
 using Xenko.Core;
 using Xenko.Core.Collections;
 using Xenko.Core.Mathematics;
+using Xenko.Engine;
 using Xenko.Games;
 using Xenko.Graphics;
 using Xenko.Rendering;
 
-namespace Xenko.Debug
+namespace Xenko.DebugRendering
 {
 
-    public class DebugSystem : GameSystemBase
+    public class DebugRenderSystem : GameSystemBase
     {
 
         internal enum DebugRenderableType : byte
@@ -208,7 +209,7 @@ namespace Xenko.Debug
 
         public RenderGroupMask RenderGroup { get; set; } = RenderGroupMask.All;
 
-        public DebugSystem(IServiceRegistry registry) : base(registry)
+        public DebugRenderSystem(IServiceRegistry registry) : base(registry)
         {
             Enabled = true;
             Visible = Platform.IsRunningDebugAssembly;
@@ -335,22 +336,12 @@ namespace Xenko.Debug
         private bool CreateDebugRenderObjects()
         {
 
-            // TODO: figure out where we can actually get this from that doesn't introduce a circular dependency on Xenko.Engine?
-            var sceneSystem = Services.GetService<SceneSystem>();
-            if (sceneSystem == null) return false;
+            // TODO: is this sane at all? it still seems a bit off.. what happens if the VisibilityGroups stuff gets changed/updated for instance?
+            //  or will that never happen? ask xen2 about this and visibilitygroups again specifically.....
+            var renderContext = RenderContext.GetShared(Services);
+            if (renderContext == null) return false;
 
-            var sceneInstance = sceneSystem.SceneInstance;
-            VisibilityGroup visibilityGroup = null;
-
-            foreach (var currentVisibilityGroup in sceneInstance.VisibilityGroups)
-            {
-                if (currentVisibilityGroup.RenderSystem == sceneSystem.GraphicsCompositor.RenderSystem)
-                {
-                    visibilityGroup = currentVisibilityGroup;
-                    break;
-                }
-            }
-
+            var visibilityGroup = renderContext.VisibilityGroup;
             if (visibilityGroup == null) return false;
 
             var newSolidRenderObject = new DebugRenderFeature.DebugRenderObject

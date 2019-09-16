@@ -11,7 +11,7 @@ using Xenko.Core.Diagnostics;
 using Xenko.Core.IO;
 using Xenko.Core.Mathematics;
 using Xenko.Core.Storage;
-using Xenko.Debug;
+using Xenko.DebugRendering;
 using Xenko.Engine.Design;
 using Xenko.Engine.Processors;
 using Xenko.Games;
@@ -225,6 +225,9 @@ namespace Xenko.Engine
 
             DebugTextSystem = new DebugTextSystem(Services);
             Services.AddService(DebugTextSystem);
+
+            DebugRenderSystem = new DebugRenderSystem(Services);
+            Services.AddService(DebugRenderSystem);
 
             ProfilingSystem = new GameProfilingSystem(Services);
             Services.AddService(ProfilingSystem);

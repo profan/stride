@@ -14,7 +14,7 @@ using Xenko.Shaders;
 using Xenko.Core.Mathematics;
 using Buffer = Xenko.Graphics.Buffer;
 
-namespace Xenko.Debug
+namespace Xenko.DebugRendering
 {
     public static partial class LinePrimitiveShaderKeys
     {

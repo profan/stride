@@ -425,7 +425,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fr", "fr", "{62E9A8E4-79AF-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xenko.Rendering", "..\sources\engine\Xenko.Rendering\Xenko.Rendering.csproj", "{AD4FDC24-B64D-4ED7-91AA-62C9EDA12FA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xenko.Debug", "..\sources\engine\Xenko.Debug\Xenko.Debug.csproj", "{4093AE68-AEF9-4FFB-B354-45CB19EF1A7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xenko.DebugRendering", "..\sources\engine\Xenko.Debug\Xenko.DebugRendering.csproj", "{4093AE68-AEF9-4FFB-B354-45CB19EF1A7F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

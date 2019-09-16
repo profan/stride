@@ -79,7 +79,7 @@ using Xenko.Core.Mathematics;
 using Xenko.Graphics.GeometricPrimitives;
 using Xenko.Graphics;
 
-namespace Xenko.Debug
+namespace Xenko.DebugRendering
 {
     public class DebugPrimitives
     {

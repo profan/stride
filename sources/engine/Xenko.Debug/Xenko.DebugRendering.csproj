@@ -9,13 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xenko.Engine\Xenko.Engine.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\..\shared\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\Xenko.Core.Mathematics\Xenko.Core.Mathematics.csproj" />
+    <ProjectReference Include="..\Xenko.Graphics\Xenko.Graphics.csproj" />
+    <ProjectReference Include="..\Xenko.Rendering\Xenko.Rendering.csproj" />
   </ItemGroup>
 
   <ItemGroup>
