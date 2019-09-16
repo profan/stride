@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("106cd3bf-dec8-4f32-adcc-b089ab95736c")]
+[assembly: Guid("CBEA3D05-5733-41D7-B09D-73E91506CD30")]
 
 #pragma warning disable 436 // Xenko.PublicKeys is defined in multiple assemblies
+[assembly: InternalsVisibleTo("Xenko.Engine" + Xenko.PublicKeys.Default)]

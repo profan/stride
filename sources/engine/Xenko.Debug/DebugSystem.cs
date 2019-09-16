@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using Xenko.Core;
 using Xenko.Core.Collections;
 using Xenko.Core.Mathematics;
-using Xenko.Engine;
 using Xenko.Games;
 using Xenko.Graphics;
 using Xenko.Rendering;
@@ -336,6 +335,7 @@ namespace Xenko.Debug
         private bool CreateDebugRenderObjects()
         {
 
+            // TODO: figure out where we can actually get this from that doesn't introduce a circular dependency on Xenko.Engine?
             var sceneSystem = Services.GetService<SceneSystem>();
             if (sceneSystem == null) return false;
 
