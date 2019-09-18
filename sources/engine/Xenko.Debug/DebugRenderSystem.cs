@@ -201,6 +201,8 @@ namespace Xenko.DebugRendering
 
         private DebugRenderFeature.DebugRenderObject solidPrimitiveRenderer;
         private DebugRenderFeature.DebugRenderObject wireframePrimitiveRenderer;
+        private DebugRenderFeature.DebugRenderObject transparentSolidPrimitiveRenderer;
+        private DebugRenderFeature.DebugRenderObject transparentWireframePrimitiveRenderer;
 
         public Color PrimitiveColor { get; set; } = Color.LightGreen;
 
@@ -339,24 +341,44 @@ namespace Xenko.DebugRendering
             // TODO: is this sane at all? it still seems a bit off.. what happens if the VisibilityGroups stuff gets changed/updated for instance?
             //  or will that never happen? ask xen2 about this and visibilitygroups again specifically.....
             var renderContext = RenderContext.GetShared(Services);
-            if (renderContext == null) return false;
+            if (renderContext == null)
+                return false;
 
             var visibilityGroup = renderContext.VisibilityGroup;
-            if (visibilityGroup == null) return false;
+            if (visibilityGroup == null)
+                return false;
 
             var newSolidRenderObject = new DebugRenderFeature.DebugRenderObject
             {
-                CurrentFillMode = FillMode.Solid
+                CurrentFillMode = FillMode.Solid,
+                Stage = DebugRenderFeature.DebugRenderStage.Opaque
             };
             visibilityGroup.RenderObjects.Add(newSolidRenderObject);
             solidPrimitiveRenderer = newSolidRenderObject;
 
             var newWireframeRenderObject = new DebugRenderFeature.DebugRenderObject
             {
-                CurrentFillMode = FillMode.Wireframe
+                CurrentFillMode = FillMode.Wireframe,
+                Stage = DebugRenderFeature.DebugRenderStage.Opaque
             };
             visibilityGroup.RenderObjects.Add(newWireframeRenderObject);
             wireframePrimitiveRenderer = newWireframeRenderObject;
+
+            var newTransparentSolidRenderObject = new DebugRenderFeature.DebugRenderObject
+            {
+                CurrentFillMode = FillMode.Solid,
+                Stage = DebugRenderFeature.DebugRenderStage.Transparent
+            };
+            visibilityGroup.RenderObjects.Add(newTransparentSolidRenderObject);
+            transparentSolidPrimitiveRenderer = newTransparentSolidRenderObject;
+
+            var newTransparentWireframeRenderObject = new DebugRenderFeature.DebugRenderObject
+            {
+                CurrentFillMode = FillMode.Wireframe,
+                Stage = DebugRenderFeature.DebugRenderStage.Transparent
+            };
+            visibilityGroup.RenderObjects.Add(newTransparentWireframeRenderObject);
+            transparentWireframePrimitiveRenderer = newTransparentWireframeRenderObject;
 
             return true;
 
@@ -365,12 +387,14 @@ namespace Xenko.DebugRendering
         public override void Update(GameTime gameTime)
         {
 
-            if (!Enabled || !Visible) return;
+            if (!Enabled || !Visible)
+                return;
 
             if (wireframePrimitiveRenderer == null)
             {
                 bool created = CreateDebugRenderObjects();
-                if (!created) return;
+                if (!created)
+                    return;
             }
 
             HandlePrimitives(gameTime, renderMessages);
@@ -394,6 +418,18 @@ namespace Xenko.DebugRendering
         private void HandlePrimitives(GameTime gameTime, FastList<DebugRenderable> messages)
         {
 
+            DebugRenderFeature.DebugRenderObject ChooseRenderer(DebugRenderableFlags flags, byte alpha)
+            {
+                if (alpha < 255)
+                {
+                    return ((flags & DebugRenderableFlags.Solid) != 0) ? transparentSolidPrimitiveRenderer : transparentWireframePrimitiveRenderer;
+                }
+                else
+                {
+                    return ((flags & DebugRenderableFlags.Solid) != 0) ? solidPrimitiveRenderer : wireframePrimitiveRenderer;
+                }
+            }
+
             if (messages.Count == 0)
             {
                 return;
@@ -402,33 +438,32 @@ namespace Xenko.DebugRendering
             for (int i = 0; i < messages.Count; ++i)
             {
                 ref var msg = ref messages.Items[i];
-                var primitiveRenderer = ((msg.Flags & DebugRenderableFlags.Solid) != 0) ? solidPrimitiveRenderer : wireframePrimitiveRenderer;
                 var useDepthTest = (msg.Flags & DebugRenderableFlags.DepthTest) != 0;
                 switch (msg.Type)
                 {
                     case DebugRenderableType.Quad:
-                        primitiveRenderer.DrawQuad(ref msg.QuadData.Position, ref msg.QuadData.Size, ref msg.QuadData.Rotation, ref msg.QuadData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.QuadData.Color.A).DrawQuad(ref msg.QuadData.Position, ref msg.QuadData.Size, ref msg.QuadData.Rotation, ref msg.QuadData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Circle:
-                        primitiveRenderer.DrawCircle(ref msg.CircleData.Position, msg.CircleData.Radius, ref msg.CircleData.Rotation, ref msg.CircleData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.CircleData.Color.A).DrawCircle(ref msg.CircleData.Position, msg.CircleData.Radius, ref msg.CircleData.Rotation, ref msg.CircleData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Line:
-                        primitiveRenderer.DrawLine(ref msg.LineData.Start, ref msg.LineData.End, ref msg.LineData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(ref msg.LineData.Start, ref msg.LineData.End, ref msg.LineData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Cube:
-                        primitiveRenderer.DrawCube(ref msg.CubeData.Position, ref msg.CubeData.End, ref msg.CubeData.Rotation, ref msg.CubeData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(ref msg.CubeData.Position, ref msg.CubeData.End, ref msg.CubeData.Rotation, ref msg.CubeData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Sphere:
-                        primitiveRenderer.DrawSphere(ref msg.SphereData.Position, msg.SphereData.Radius, ref msg.SphereData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(ref msg.SphereData.Position, msg.SphereData.Radius, ref msg.SphereData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Capsule:
-                        primitiveRenderer.DrawCapsule(ref msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, ref msg.CapsuleData.Rotation, ref msg.CapsuleData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.CapsuleData.Color.A).DrawCapsule(ref msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, ref msg.CapsuleData.Rotation, ref msg.CapsuleData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Cylinder:
-                        primitiveRenderer.DrawCylinder(ref msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, ref msg.CylinderData.Rotation, ref msg.CylinderData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.CylinderData.Color.A).DrawCylinder(ref msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, ref msg.CylinderData.Rotation, ref msg.CylinderData.Color, depthTest: useDepthTest);
                         break;
                     case DebugRenderableType.Cone:
-                        primitiveRenderer.DrawCone(ref msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, ref msg.ConeData.Rotation, ref msg.ConeData.Color, depthTest: useDepthTest);
+                        ChooseRenderer(msg.Flags, msg.ConeData.Color.A).DrawCone(ref msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, ref msg.ConeData.Rotation, ref msg.ConeData.Color, depthTest: useDepthTest);
                         break;
                 }
             }
