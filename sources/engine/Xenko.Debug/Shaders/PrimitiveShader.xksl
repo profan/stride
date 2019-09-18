@@ -32,7 +32,7 @@ namespace Xenko.DebugRendering
         override stage void PSMain()
         {
 
-            float lineWidth = 0.001f * LineWidthMultiplier;
+            float lineWidth = (0.001f * LineWidthMultiplier);
 
             float2 uv = streams.Uv;
             float lx = step(lineWidth, uv.x);
@@ -41,6 +41,7 @@ namespace Xenko.DebugRendering
             float hy = step(uv.y, 1.0f - lineWidth);
 
             streams.ColorTarget = lerp(streams.Color, float4(streams.Color.rgb, 0.0f), lx*ly*hx*hy);
+            if (streams.ColorTarget.a <= 0.1f) discard;
 
         }
 

@@ -945,7 +945,6 @@ namespace Xenko.DebugRendering
 
             var commandList = context.CommandList;
 
-            // TODO: probably get these objects from renderView?
             for (int index = startIndex; index < endIndex; index++)
             {
                 var renderNodeReference = renderViewStage.SortedRenderNodes[index].RenderNode;

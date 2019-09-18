@@ -375,6 +375,7 @@ namespace Xenko.Engine
             //Add the sprite animation System
             GameSystems.Add(SpriteAnimation);
 
+            GameSystems.Add(DebugRenderSystem);
             GameSystems.Add(DebugTextSystem);
             GameSystems.Add(ProfilingSystem);
 

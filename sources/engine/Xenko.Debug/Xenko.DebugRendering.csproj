@@ -1,20 +1,18 @@
 ﻿<Project>
+
+  <PropertyGroup>
+    <XenkoAssemblySign>true</XenkoAssemblySign>
+    <XenkoRuntime>true</XenkoRuntime>
+    <XenkoRuntimeNetStandard>true</XenkoRuntimeNetStandard>
+  </PropertyGroup>
   
   <Import Project="..\..\targets\Xenko.PreSettings.targets" />
   <Import Project="Sdk.props" Sdk="MSBuild.Sdk.Extras" Version="2.0.24" />
   
   <PropertyGroup>
-    <XenkoRuntime>true</XenkoRuntime>
-    <XenkoAssemblySign>true</XenkoAssemblySign>
-    <XenkoRuntimeNetStandard>true</XenkoRuntimeNetStandard>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-  
-  <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <XenkoAssemblyProcessor>true</XenkoAssemblyProcessor>
-    <XenkoPlatformDependent>true</XenkoPlatformDependent>
-    <XenkoProjectPlatformDependentWindows>true</XenkoProjectPlatformDependentWindows>
+    <XenkoPackAssets>true</XenkoPackAssets>
     <XenkoBuildTags>*</XenkoBuildTags>
   </PropertyGroup>
 
