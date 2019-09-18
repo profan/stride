@@ -811,6 +811,7 @@ namespace Xenko.DebugRendering
             );
 
             CheckBuffers(context);
+            lineVertices.Clear(true);
             instances.Clear(true);
 
         }
