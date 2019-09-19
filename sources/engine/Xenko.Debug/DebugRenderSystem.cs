@@ -199,17 +199,17 @@ namespace Xenko.DebugRendering
         private readonly FastList<DebugRenderable> renderMessages = new FastList<DebugRenderable>();
         private readonly FastList<DebugRenderable> renderMessagesWithLifetime = new FastList<DebugRenderable>();
 
-        private DebugRenderFeature.DebugRenderObject solidPrimitiveRenderer;
-        private DebugRenderFeature.DebugRenderObject wireframePrimitiveRenderer;
-        private DebugRenderFeature.DebugRenderObject transparentSolidPrimitiveRenderer;
-        private DebugRenderFeature.DebugRenderObject transparentWireframePrimitiveRenderer;
+        private DebugRenderObject solidPrimitiveRenderer;
+        private DebugRenderObject wireframePrimitiveRenderer;
+        private DebugRenderObject transparentSolidPrimitiveRenderer;
+        private DebugRenderObject transparentWireframePrimitiveRenderer;
 
         public Color PrimitiveColor { get; set; } = Color.LightGreen;
 
         public int MaxPrimitives { get; set; } = 100;
         public int MaxPrimitivesWithLifetime { get; set; } = 100;
 
-        public RenderGroupMask RenderGroup { get; set; } = RenderGroupMask.All;
+        public RenderGroup RenderGroup { get; set; } = RenderGroup.Group31;
 
         public DebugRenderSystem(IServiceRegistry registry) : base(registry)
         {
@@ -348,7 +348,7 @@ namespace Xenko.DebugRendering
             if (visibilityGroup == null)
                 return false;
 
-            var newSolidRenderObject = new DebugRenderFeature.DebugRenderObject
+            var newSolidRenderObject = new DebugRenderObject
             {
                 CurrentFillMode = FillMode.Solid,
                 Stage = DebugRenderFeature.DebugRenderStage.Opaque
@@ -356,7 +356,7 @@ namespace Xenko.DebugRendering
             visibilityGroup.RenderObjects.Add(newSolidRenderObject);
             solidPrimitiveRenderer = newSolidRenderObject;
 
-            var newWireframeRenderObject = new DebugRenderFeature.DebugRenderObject
+            var newWireframeRenderObject = new DebugRenderObject
             {
                 CurrentFillMode = FillMode.Wireframe,
                 Stage = DebugRenderFeature.DebugRenderStage.Opaque
@@ -364,7 +364,7 @@ namespace Xenko.DebugRendering
             visibilityGroup.RenderObjects.Add(newWireframeRenderObject);
             wireframePrimitiveRenderer = newWireframeRenderObject;
 
-            var newTransparentSolidRenderObject = new DebugRenderFeature.DebugRenderObject
+            var newTransparentSolidRenderObject = new DebugRenderObject
             {
                 CurrentFillMode = FillMode.Solid,
                 Stage = DebugRenderFeature.DebugRenderStage.Transparent
@@ -372,7 +372,7 @@ namespace Xenko.DebugRendering
             visibilityGroup.RenderObjects.Add(newTransparentSolidRenderObject);
             transparentSolidPrimitiveRenderer = newTransparentSolidRenderObject;
 
-            var newTransparentWireframeRenderObject = new DebugRenderFeature.DebugRenderObject
+            var newTransparentWireframeRenderObject = new DebugRenderObject
             {
                 CurrentFillMode = FillMode.Wireframe,
                 Stage = DebugRenderFeature.DebugRenderStage.Transparent
@@ -397,6 +397,12 @@ namespace Xenko.DebugRendering
                     return;
             }
 
+            // TODO: check if i'm doing this correctly..
+            solidPrimitiveRenderer.RenderGroup = RenderGroup;
+            wireframePrimitiveRenderer.RenderGroup = RenderGroup;
+            transparentSolidPrimitiveRenderer.RenderGroup = RenderGroup;
+            transparentWireframePrimitiveRenderer.RenderGroup = RenderGroup;
+
             HandlePrimitives(gameTime, renderMessages);
             HandlePrimitives(gameTime, renderMessagesWithLifetime);
 
@@ -418,7 +424,7 @@ namespace Xenko.DebugRendering
         private void HandlePrimitives(GameTime gameTime, FastList<DebugRenderable> messages)
         {
 
-            DebugRenderFeature.DebugRenderObject ChooseRenderer(DebugRenderableFlags flags, byte alpha)
+            DebugRenderObject ChooseRenderer(DebugRenderableFlags flags, byte alpha)
             {
                 if (alpha < 255)
                 {
